@@ -1,7 +1,9 @@
 package com.demo.studentmanagement.Service;
 
 import com.demo.studentmanagement.Entity.Student;
+import com.demo.studentmanagement.Entity.User;
 import com.demo.studentmanagement.Repository.StudentData;
+import com.demo.studentmanagement.Repository.UserData;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,9 +12,11 @@ import java.util.List;
 public class StudentService {
 
     private final StudentData studentData;
+    private final UserData userData;
 
-    public StudentService(StudentData studentRepository) {
-        this.studentData = studentRepository;
+    public StudentService(StudentData studentData, UserData userData) {
+        this.studentData = studentData;
+        this.userData = userData;
     }
 
     public List<Student> getAllStudents() {
@@ -20,7 +24,18 @@ public class StudentService {
     }
 
     public Student addStudent(Student student) {
-        return studentData.save(student);
+
+        Student savedStudent = studentData.save(student);
+
+        User user = new User(
+                student.getStudentId(),
+                "123456",
+                "STUDENT"
+        );
+
+        userData.save(user);
+
+        return savedStudent;
     }
 
     public Student getStudentById(String id) {

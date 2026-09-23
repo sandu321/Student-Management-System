@@ -1,37 +1,42 @@
 package com.demo.studentmanagement.Entity;
+
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="student")
+@Table(name = "student")
 public class Student {
 
     @Id
-    private String StudentId;
-    private String StudentName;
+    private String studentId;
+
+    private String studentName;
     private String email;
     private String address;
 
-    public Student(String id,String name,String email,String address){
-        this.StudentId=id;
-        this.StudentName=name;
-        this.email=email;
-        this.address=address;
+    public Student() {
+    }
+
+    public Student(String id, String name, String email, String address) {
+        this.studentId = id;
+        this.studentName = name;
+        this.email = email;
+        this.address = address;
     }
 
     public String getStudentId() {
-        return StudentId;
+        return studentId;
     }
 
     public void setStudentId(String studentId) {
-        StudentId = studentId;
+        this.studentId = studentId;
     }
 
     public String getStudentName() {
-        return StudentName;
+        return studentName;
     }
 
     public void setStudentName(String studentName) {
-        StudentName = studentName;
+        this.studentName = studentName;
     }
 
     public String getEmail() {
@@ -49,5 +54,4 @@ public class Student {
     public void setAddress(String address) {
         this.address = address;
     }
-
 }

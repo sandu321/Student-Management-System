@@ -1,58 +1,68 @@
 package com.demo.studentmanagement.Controller;
+
 import com.demo.studentmanagement.Entity.Student;
-import com.demo.studentmanagement.Repository.StudentData;
+import com.demo.studentmanagement.Service.StudentService;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/students")
+@RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:5173")
 public class StudentController {
-    private final StudentData studentData;
 
-    public StudentController(StudentData studentData) {
-        this.studentData = studentData;
+    private final StudentService studentService;
+
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
     }
 
-    @GetMapping
+
+    @GetMapping("/admin/students")
     public List<Student> getAllStudents() {
-        return studentData.findAll();
+        return studentService.getAllStudents();
     }
 
-    @PostMapping
+    @PostMapping("/admin/students")
     public Student addStudent(@RequestBody Student student) {
-        return studentData.save(student);
+        return studentService.addStudent(student);
     }
 
-    @GetMapping("/{id}")
-    public Student getStudent(@PathVariable String id) {
-        return studentData.findById(id)
-                .orElseThrow(() -> new RuntimeException("Student not found"));
-    }
-
-    @PutMapping("/{id}")
+    @PutMapping("/admin/students/{id}")
     public Student updateStudent(
             @PathVariable String id,
             @RequestBody Student studentDetails) {
 
-        Student student = studentData.findById(id)
-                .orElseThrow(() -> new RuntimeException("Student not found"));
-
-        student.setStudentId(studentDetails.getStudentId());
-        student.setStudentName(studentDetails.getStudentName());
-        student.setEmail(studentDetails.getEmail());
-        student.setAddress(studentDetails.getAddress());
-
-        return studentData.save(student);
+        return studentService.updateStudent(id, studentDetails);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/students/{id}")
     public String deleteStudent(@PathVariable String id) {
 
-        studentData.deleteById(id);
+        studentService.deleteStudent(id);
 
         return "Student deleted successfully";
     }
 
 
+    @GetMapping("/student/profile/{id}")
+    public Student getStudentProfile(@PathVariable String id) {
+        return studentService.getStudentById(id);
+    }
+
+    @PutMapping("/student/profile/{id}")
+    public Student updateStudentProfile(
+            @PathVariable String id,
+            @RequestBody Student studentDetails) {
+
+        return studentService.updateStudent(id, studentDetails);
+    }
+
+    @DeleteMapping("/student/profile/{id}")
+    public String deleteStudentProfile(@PathVariable String id) {
+
+        studentService.deleteStudent(id);
+
+        return "Student profile deleted successfully";
+    }
 }
